@@ -19,9 +19,8 @@ If you use HODOR in your research, please cite:
 }
 ```
 ## 📦 What's Inside
-
-![Snapshot of sequence 2895](https://github.com/TAWilts/HODOR/blob/main/vlcsnap-2025-04-11-16h20m16s693.png}
-
+![Snapshot of sequence 2895](https://github.com/TAWilts/HODOR/blob/main/vlcsnap-2025-04-11-16h20m16s693.png)
+> Snapshot of sequence 2895
 * 🔹 Synchronized imaging sonar and stereo camera data
 * 🔹 Over 400 hours of continuous sequences per sensor
 * 🔹 Associated abiotic measurements (e.g., CTD, ADCP, fluorometer) 
@@ -29,7 +28,7 @@ If you use HODOR in your research, please cite:
 
 The dataset is available at PANGAEA:
 
-Read the Paper:
+Read the paper:
 
 The associated abiotic measurements:
 
