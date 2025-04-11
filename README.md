@@ -21,8 +21,11 @@ If you use HODOR in your research, please cite:
 * 🔹 Ground-truth tracking annotations (coming soon)
 
 The dataset is available at PANGAEA:
+
 Read the Paper:
+
 The associated abiotic measurements:
+
 
 ## 🚀 HOW TO:
 Download this repo and place it inside the dataset as shown:
