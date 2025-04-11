@@ -6,11 +6,16 @@ Welcome to the official repository of the **HODOR dataset**, a unique long-term 
 
 If you use HODOR in your research, please cite:
 ```bibtex
-@inproceedings{wilts2025hodor,
-  title={HODOR: Hydroacoustic and Optical Dataset for Oceanic Research},
-  author={Wilts, Boeer, Winkler and Others},
-  booktitle={Proceedings of XYZ Conference},
-  year={2023}
+@ARTICLE{HODOR2025,
+  author={Wilts, Thomas and Boeer, Gordon and Winkler, Julian and Others},
+  journal={IEEE Data Descriptions}, 
+  title={HODOR: Hydroacoustic and Optical Dataset for Oceanic Research}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={},
+  keywords={},
+  doi={}}
 }
 ```
 ## 📦 What's Inside
