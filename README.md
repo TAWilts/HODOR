@@ -46,7 +46,7 @@ Download this repo and place it inside the dataset as shown:
 
 ### 🧠 MATLAB
 
-* visualizeSequence.m: Display all sensor data at the same time
+* visualizeSequence.m: Display all sensor data at the same time (see example-gif above)
 
 * analyzeCompleteSet: Runs through all dataset video files and performs statistical measurements
 
