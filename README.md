@@ -35,6 +35,8 @@ The associated abiotic measurements:
 
 ## 🚀 HOW TO:
 Download this repo and place it inside the dataset as shown:
+![](https://github.com/TAWilts/HODOR/blob/main/folderStructureMarkdown.png)
+> Required folder arrangement
 
 ## Explore and interact with the dataset using our starter tools:
 ### 🐍 Python
