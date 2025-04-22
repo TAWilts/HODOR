@@ -58,7 +58,7 @@ We welcome your feedback, questions, and contributions!
 
 * 👉 Start a thread in [Discussions](https://github.com/TAWilts/HODOR/discussions) to share research ideas or get support
 
-* 👉 [Fork](https://github.com/TAWilts/HODOR/fork) the repo and send us a pull request to contribute new tools, improvements, or annotations
+* :metal: [Fork](https://github.com/TAWilts/HODOR/fork) the repo and send us a pull request to contribute new tools, improvements, or annotations
 
 
 Let’s build the future of underwater perception—together. 🌊🤿
