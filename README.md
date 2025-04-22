@@ -30,7 +30,7 @@ The dataset is available at PANGAEA:
 
 Read the paper:
 
-The associated abiotic measurements:
+The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
 
 ## 🚀 HOW TO:
