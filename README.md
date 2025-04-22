@@ -54,11 +54,11 @@ Download this repo and place it inside the dataset as shown:
 
 We welcome your feedback, questions, and contributions!
 
-* 👉 Use the Issues tab for bug reports and feature requests
+* 👉 Use the [Issues](https://github.com/TAWilts/HODOR/issues) tab for bug reports and feature requests
 
-* 👉 Start a thread in Discussions to share research ideas or get support
+* 👉 Start a thread in [Discussions](https://github.com/TAWilts/HODOR/discussions) to share research ideas or get support
 
-* 👉 Fork the repo and send us a pull request to contribute new tools, improvements, or annotations
+* 👉 [Fork](https://github.com/TAWilts/HODOR/fork) the repo and send us a pull request to contribute new tools, improvements, or annotations
 
 
 Let’s build the future of underwater perception—together. 🌊🤿
