@@ -34,16 +34,17 @@ The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](ht
 
 
 ## 🚀 HOW TO:
-Download this repo and place it inside the dataset as shown:
+Download this repo and place the datasets folders as shown:
 
 ![](https://github.com/TAWilts/HODOR/blob/main/folderStructureMarkdown.png)
-> Required folder arrangement. Place this repo inside meta.
+> Recommended folder arrangement. Place the dataset inside the project.
 
 ## Explore and interact with the dataset using our starter tools:
+<!--
 ### 🐍 Python
 
 * hashCheck.py: Test for integrity of the dataset
-
+-->
 ### 🧠 MATLAB
 
 * visualizeSequence.m: Display all sensor data at the same time (see example-gif above)
