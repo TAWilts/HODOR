@@ -26,7 +26,7 @@ If you use HODOR in your research, please cite:
 * 🔹 Associated abiotic measurements (e.g., CTD, ADCP, fluorometer) 
 * 🔹 Ground-truth tracking annotations (coming soon)
 
-The dataset is available at PANGAEA:
+The dataset is available at PANGAEA: [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000)
 
 Read the paper:
 
@@ -38,6 +38,8 @@ Download this repo and place the datasets folders as shown:
 
 <img src="https://github.com/TAWilts/HODOR/blob/main/folderStructureMarkdown.png" height="400">
 > Recommended folder arrangement. Place the dataset inside the project.
+
+Download the tab delimited files at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). In this files, the download links for the camera, sonar and abundancy data are given. You can either download the complete (sub-) datasets or single files.
 
 ## Explore and interact with the dataset using our starter tools:
 <!--
