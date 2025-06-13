@@ -24,7 +24,7 @@ If you use HODOR in your research, please cite:
 * 🔹 Synchronized imaging sonar and stereo camera data
 * 🔹 Over 400 hours of continuous sequences per sensor
 * 🔹 Associated abiotic measurements (e.g., CTD, ADCP, fluorometer) 
-* 🔹 Ground-truth tracking annotations (coming soon)
+* 🔹 ML-based tracking annotations (coming soon)
 
 The dataset is available at PANGAEA: [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000)
 
