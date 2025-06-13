@@ -36,7 +36,7 @@ The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](ht
 ## 🚀 HOW TO:
 Download this repo and place the datasets folders as shown:
 
-<img src="[https://github.com/TAWilts/HODOR/blob/main/folderStructureMarkdown.png](https://github.com/TAWilts/HODOR/blob/main/repoFiles/folderStructureMarkdown.png)" height="400">
+<img src="[https://github.com/TAWilts/HODOR/blob/main/repoFiles/folderStructureMarkdown.png](https://github.com/TAWilts/HODOR/blob/main/repoFiles/folderStructureMarkdown.png)" height="400">
 > Recommended folder arrangement. Place the dataset inside the project.
 
 Download the tab delimited files at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). In this files, the download links for the camera, sonar and abundancy data are given. You can either download the complete (sub-) datasets or single files.
