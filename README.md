@@ -31,7 +31,7 @@ If you use HODOR in your research, please cite:
 * 🔹 Associated abiotic measurements (e.g., CTD, ADCP, fluorometer) 
 * 🔹 Machine-learning-based annotations (coming soon)
 
-The dataset is available at PANGAEA: [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000)
+The dataset is available at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
 
 Read the paper:
 
