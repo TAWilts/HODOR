@@ -37,9 +37,9 @@ The dataset is available at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](ht
 
 Read the paper:
 
-Eary Access: https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
-
-The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
+  Early Access: https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
+  
+  The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
 
 ## 🚀 HOW TO:
