@@ -5,6 +5,9 @@ Welcome to the official repository of the **HODOR dataset**, a unique long-term 
 ## 📄 Cite Us
 
 If you use HODOR in your research, please cite:
+
+This is currently the early access version of the paper:
+
 ```bibtex
 @ARTICLE{11121653,
   author={Wilts, Thomas and Böer, Gordon and Winkler, Julian and Cisewski, Boris and Schramm, Hauke and Badri-Hoeher, Sabah},
@@ -33,6 +36,8 @@ If you use HODOR in your research, please cite:
 The dataset is available at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
 
 Read the paper:
+
+Eary Access: https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
 
 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
