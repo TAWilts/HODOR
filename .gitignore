@@ -1,3 +1,16 @@
 /Camera/
 /Sonar/
-meta/hodor_python/uv.lock
+
+# common python ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+*.lock
