@@ -1,7 +1,29 @@
 import requests
 import pandas as pd
 from pathlib import Path
+from enum import Enum
 
+
+class Species(str, Enum):
+    """Enum for species in the HODOR dataset. Use it e.g. to filter data by species."""
+    ANGUILLA_ANGUILLA = "anguilla_anguilla"
+    BIRD_CORMORANT = "bird_cormorant"
+    BIRD_UNSPECIFIED = "bird_unspecified"
+    CRAB_CRUSTACEA = "crab_crustacea"
+    FISH_CLUPEIDAE = "fish_clupeidae"
+    FISH_COD = "fish_cod"
+    FISH_MACKEREL = "fish_mackerel"
+    FISH_MUGILIDAE = "fish_mugilidae"
+    FISH_ONCORHYNCHUS = "fish_oncorhynchus"
+    FISH_PIPEFISH = "fish_pipefish"
+    FISH_PLAICE = "fish_plaice"
+    FISH_SALMONIDAE = "fish_salmonidae"
+    FISH_SCAD = "fish_scad"
+    FISH_UNSPECIFIED = "fish_unspecified"
+    JELLYFISH_AURELIA = "jellyfish_aurelia"
+    JELLYFISH_CTENOPHORA = "jellyfish_ctenophora"
+    JELLYFISH_CYANEA = "jellyfish_cyanea"
+    JELLYFISH_UNSPECIFIED = "jellyfish_unspecified"
 
 class HODOR_Dataset:
     def __init__(self, filepath: str):
@@ -46,24 +68,9 @@ class HODOR_Dataset:
             "sequenceStartUnix",
             "sequenceEndUnix",
             "DateTimeStart",
-            "DateTimeEnd",
-            "anguilla_anguilla",
-            "bird_cormorant",
-            "bird_unspecified",
-            "crab_crustacea",
-            "fish_clupeidae",
-            "fish_cod",
-            "fish_mackerel",
-            "fish_mugilidae",
-            "fish_oncorhynchus",
-            "fish_pipefish",
-            "fish_plaice",
-            "fish_salmonidae",
-            "fish_scad",
-            "fish_unspecified",
-            "jellyfish_aurelia",
-            "jellyfish_ctenophora",
-            "jellyfish_cyanea",
-            "jellyfish_unspecified",
-        ]
+            "DateTimeEnd" ] + [s.value for s in Species]
+
+        # new column which holds the duration of each sequence
+        df.insert(5, "sequence_length", df["DateTimeEnd"] - df["DateTimeStart"])
+
         return df
