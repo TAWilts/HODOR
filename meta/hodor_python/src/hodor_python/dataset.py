@@ -18,7 +18,16 @@ class HODOR_Dataset:
         with open(output_path, "wb") as f:
             f.write(response.content)
 
-    def _load_dataframe(self):
+    def _load_dataframe(self) -> pd.DataFrame:
+        """
+        Loads the hodor .tab file file into a pandas DataFrame.
+        The method reads the file specified by `self.filepath`, identifies the end of the header block (marked by a line starting with "*/"),
+        and loads the remaining data using pandas. It converts the "Date/time start" and "Date/time end" columns to datetime objects,
+        and renames the columns to more readable names.
+        Returns:
+            pandas.DataFrame: The loaded and processed DataFrame with standardized column names.
+        """
+
         with open(self.filepath, "r") as f:
             lines = f.readlines()
         # Find end of header
@@ -30,4 +39,31 @@ class HODOR_Dataset:
         df = pd.read_csv(self.filepath, sep="\t", header=1, skiprows=header_idx)
         df["Date/time start"] = pd.to_datetime(df["Date/time start"])
         df["Date/time end"] = pd.to_datetime(df["Date/time end"])
+
+        # use prettier column names
+        df.columns = [
+            "SeqID",
+            "sequenceStartUnix",
+            "sequenceEndUnix",
+            "DateTimeStart",
+            "DateTimeEnd",
+            "anguilla_anguilla",
+            "bird_cormorant",
+            "bird_unspecified",
+            "crab_crustacea",
+            "fish_clupeidae",
+            "fish_cod",
+            "fish_mackerel",
+            "fish_mugilidae",
+            "fish_oncorhynchus",
+            "fish_pipefish",
+            "fish_plaice",
+            "fish_salmonidae",
+            "fish_scad",
+            "fish_unspecified",
+            "jellyfish_aurelia",
+            "jellyfish_ctenophora",
+            "jellyfish_cyanea",
+            "jellyfish_unspecified",
+        ]
         return df
