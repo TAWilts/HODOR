@@ -1,6 +1,11 @@
 /Camera/
 /Sonar/
 
+# ignore private files
+*.env
+*.local
+*.crt
+
 # common python ignores
 __pycache__/
 *.py[cod]
