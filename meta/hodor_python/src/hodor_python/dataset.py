@@ -1,7 +1,7 @@
-import requests
 import pandas as pd
 from pathlib import Path
 from enum import Enum
+from pangaeapy import PanDataSet
 
 
 class Species(str, Enum):
@@ -26,39 +26,30 @@ class Species(str, Enum):
     JELLYFISH_UNSPECIFIED = "jellyfish_unspecified"
 
 class HODOR_Dataset:
-    def __init__(self, filepath: str):
-        self.filepath = Path(filepath)
-        if not self.filepath.exists():
-            self.download_tab_file(self.filepath)
 
-        self.df = self._load_dataframe()
-        self._url = "https://doi.pangaea.de/10.1594/PANGAEA.980059?format=textfile"
+    PANGAEA_DATASET_ID = 980059
 
-    def download_tab_file(self, output_path: str):
-        response = requests.get(self._url)
-        response.raise_for_status()
-        with open(output_path, "wb") as f:
-            f.write(response.content)
+    def __init__(self, dataset_folder: str):
+        self.dataset_folder = Path(dataset_folder)
+            
+        # internally used pangaeapy dataset
+        self._ds = PanDataSet(self.PANGAEA_DATASET_ID, cachedir=dataset_folder)
+
+        self.df: pd.DataFrame = self._load_dataframe()
 
     def _load_dataframe(self) -> pd.DataFrame:
         """
-        Loads the hodor .tab file file into a pandas DataFrame.
-        The method reads the file specified by `self.filepath`, identifies the end of the header block (marked by a line starting with "*/"),
-        and loads the remaining data using pandas. It converts the "Date/time start" and "Date/time end" columns to datetime objects,
+        Converts the pangaeapy dataframe into a more user-friendly DataFrame.
+        It converts the "Date/time start" and "Date/time end" columns to datetime objects,
         and renames the columns to more readable names.
         Returns:
             pandas.DataFrame: The loaded and processed DataFrame with standardized column names.
         """
-
-        with open(self.filepath, "r") as f:
-            lines = f.readlines()
-        # Find end of header
-        for i, line in enumerate(lines):
-            if line.startswith("*/") and not line.strip() == "":
-                header_idx = i
-                break
-        # Read the data using pandas, skipping the header block
-        df = pd.read_csv(self.filepath, sep="\t", header=1, skiprows=header_idx)
+        
+        # remove unused columns
+        df = self._ds.data.drop(columns=["Event" ,"Latitude" ,"Longitude", "Date/Time"])
+        
+        # Convert datetime columns
         df["Date/time start"] = pd.to_datetime(df["Date/time start"])
         df["Date/time end"] = pd.to_datetime(df["Date/time end"])
 
