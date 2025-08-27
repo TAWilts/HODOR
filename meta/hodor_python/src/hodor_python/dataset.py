@@ -6,6 +6,7 @@ from pangaeapy import PanDataSet
 
 class Species(str, Enum):
     """Enum for species in the HODOR dataset. Use it e.g. to filter data by species."""
+
     ANGUILLA_ANGUILLA = "anguilla_anguilla"
     BIRD_CORMORANT = "bird_cormorant"
     BIRD_UNSPECIFIED = "bird_unspecified"
@@ -25,13 +26,13 @@ class Species(str, Enum):
     JELLYFISH_CYANEA = "jellyfish_cyanea"
     JELLYFISH_UNSPECIFIED = "jellyfish_unspecified"
 
-class HODOR_Dataset:
 
+class HODOR_Dataset:
     PANGAEA_DATASET_ID = 980059
 
     def __init__(self, dataset_folder: str):
         self.dataset_folder = Path(dataset_folder)
-            
+
         # internally used pangaeapy dataset
         self._ds = PanDataSet(self.PANGAEA_DATASET_ID, cachedir=dataset_folder)
 
@@ -45,10 +46,10 @@ class HODOR_Dataset:
         Returns:
             pandas.DataFrame: The loaded and processed DataFrame with standardized column names.
         """
-        
+
         # remove unused columns
-        df = self._ds.data.drop(columns=["Event" ,"Latitude" ,"Longitude", "Date/Time"])
-        
+        df = self._ds.data.drop(columns=["Event", "Latitude", "Longitude", "Date/Time"])
+
         # Convert datetime columns
         df["Date/time start"] = pd.to_datetime(df["Date/time start"])
         df["Date/time end"] = pd.to_datetime(df["Date/time end"])
@@ -59,7 +60,8 @@ class HODOR_Dataset:
             "sequenceStartUnix",
             "sequenceEndUnix",
             "DateTimeStart",
-            "DateTimeEnd" ] + [s.value for s in Species]
+            "DateTimeEnd",
+        ] + [s.value for s in Species]
 
         # new column which holds the duration of each sequence
         df.insert(5, "sequence_length", df["DateTimeEnd"] - df["DateTimeStart"])
