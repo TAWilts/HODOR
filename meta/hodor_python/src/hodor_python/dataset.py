@@ -28,15 +28,22 @@ class Species(str, Enum):
 
 
 class HODOR_Dataset:
-    PANGAEA_DATASET_ID = 980059
+    # The base HODOR dataset (parent for the subsets: video, sonar, activity_counts)
+    HODOR_BASE_DOI = "doi:10.1594/PANGAEA.980000"
+    # The video data subset
+    HODOR_VIDEO_DOI = "doi:10.1594/PANGAEA.980001"
+    # The sonar data subset
+    HODOR_SONAR_DOI = "doi:10.1594/PANGAEA.980002"
+    # The activity counts subset
+    HODOR_COUNTS_DOI = "doi:10.1594/PANGAEA.980059"
 
     def __init__(self, dataset_folder: str):
         self.dataset_folder = Path(dataset_folder)
 
         # internally used pangaeapy dataset
-        self._ds = PanDataSet(self.PANGAEA_DATASET_ID, cachedir=dataset_folder)
+        self._counts = PanDataSet(self.HODOR_COUNTS_DOI, cachedir=dataset_folder)
 
-        self.df: pd.DataFrame = self._load_dataframe()
+        self.counts: pd.DataFrame = self._load_dataframe()
 
     def _load_dataframe(self) -> pd.DataFrame:
         """
@@ -48,7 +55,7 @@ class HODOR_Dataset:
         """
 
         # remove unused columns
-        df = self._ds.data.drop(columns=["Event", "Latitude", "Longitude", "Date/Time"])
+        df = self._counts.data.drop(columns=["Event", "Latitude", "Longitude", "Date/Time"])
 
         # Convert datetime columns
         df["Date/time start"] = pd.to_datetime(df["Date/time start"])
