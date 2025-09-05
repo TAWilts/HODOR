@@ -1,7 +1,8 @@
 # 🐟 HODOR: Hydroacoustic and Optical Dataset for Oceanic Research
 ### High-Quality Optical and Sonar Dataset for Research
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TAWilts/HODOR)
+[![DOI](https://img.shields.io/badge/DOI-10.1594%2FPANGAEA.980000-darkgreen)](https://doi.org/10.1594/PANGAEA.980000)
+  [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TAWilts/HODOR)
 
 Welcome to the official repository of the **HODOR dataset**, a unique long-term multimodal underwater dataset combining synchronized forward-looking sonar and stereo camera data, collected in the Baltic Sea via the autonomous [UFO (Underwater Fish Observatory)](https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2024.1425259/full) platform. HODOR supports research in object detection, tracking, and sensor fusion in challenging underwater environments.
 ## 📄 Cite Us
