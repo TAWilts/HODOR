@@ -61,22 +61,25 @@ Download the tab delimited files at [https://doi.pangaea.de/10.1594/PANGAEA.9800
 
 ### 🐍 Python
 
-The HODOR dataset includes a Python API for easy data access and analysis. The API provides a pandas-based interface for working with the dataset metadata and species activity counts.
+The HODOR dataset has a dedicated, installable Python package for easy data access and analysis: **[hodor-python](https://pypi.org/project/hodor-python/)**. This package provides a pandas-based interface for working with the dataset metadata and species activity counts, and is maintained in a separate repository: [https://github.com/gboeer/hodor_python](https://github.com/gboeer/hodor_python)
 
 #### Installation
 
-Navigate to the `meta/hodor_python` directory and install the package:
+Install directly from PyPI:
 
 ```bash
-cd meta/hodor_python
-pip install .
+pip install hodor-python
+```
+
+Or if you're using [uv](https://docs.astral.sh/uv/):
+```bash
+uv add hodor-python
 ```
 
 #### Quick Start
 
 ```python
-from hodor_python.dataset import HODOR_Dataset, Species
-import pandas as pd
+from hodor_python import HODOR_Dataset, Species
 
 # Create dataset instance (downloads metadata automatically)
 hodor = HODOR_Dataset(dataset_folder="HODOR")
@@ -87,8 +90,6 @@ print(hodor.counts.head())
 # Filter by species activity
 cod_sequences = hodor.counts[hodor.counts[Species.FISH_COD] > 0]
 
-# Get sequences with high activity
-busy_sequences = hodor.counts[hodor.counts.iloc[:, 6:].sum(axis=1) > 50]
 ```
 
 #### Features
@@ -96,11 +97,10 @@ busy_sequences = hodor.counts[hodor.counts.iloc[:, 6:].sum(axis=1) > 50]
 * **Easy data access**: Load HODOR metadata into pandas DataFrames
 * **Species filtering**: Built-in Species enum for consistent filtering
 * **Automatic downloads**: Integration with pangaeapy for seamless data retrieval
-* **Example notebooks**: Complete usage examples in `meta/hodor_python/notebooks/`
+* **Example notebooks**: Complete usage examples in `meta/hodor_python`
   - `download_data.ipynb`: How to download specific sequences
   - `usage_examples.ipynb`: Data analysis and visualization examples
 
-For detailed Python API documentation and advanced usage examples, see the [Python API README](meta/hodor_python/README.md).
 
 ### 🧠 MATLAB
 

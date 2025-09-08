@@ -1,8 +1,23 @@
-# Example Notebooks
+## HODOR Python Package
 
-This repository includes example Jupyter notebooks to help you get started with the HODOR dataset and its Python interface. Below are summaries of the available notebooks and what you can learn from them:
+This repository provides example notebooks for working with the HODOR dataset. To run these notebooks, you'll need to install the `hodor-python` package from PyPI:
 
-## 1. `download_data.ipynb`
+```bash
+pip install hodor-python
+```
+
+Or if you're using [uv](https://docs.astral.sh/uv/):
+```bash
+uv add hodor-python
+```
+
+The `hodor-python` package provides a Python interface for downloading and accessing data from the HODOR dataset.
+
+## Example Notebooks
+
+Below are summaries of the available notebooks and what you can learn from them:
+
+### 1. `download_data.ipynb`
 
 **Purpose:**
 - Demonstrates how to download data from the HODOR dataset using the provided Python API.
@@ -15,7 +30,7 @@ This repository includes example Jupyter notebooks to help you get started with 
 - Filtering and identifying interesting sequences based on species activity
 - Downloading only the data you need for your research
 
-## 2. `usage_examples.ipynb`
+### 2. `usage_examples.ipynb`
 
 **Purpose:**
 - Provides practical examples for loading and analyzing HODOR metadata and animal activity counts using pandas DataFrames.
