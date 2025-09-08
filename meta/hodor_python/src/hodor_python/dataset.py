@@ -40,8 +40,10 @@ class HODOR_Dataset:
     def __init__(self, dataset_folder: str):
         self.dataset_folder = Path(dataset_folder)
 
-        # internally used pangaeapy dataset
-        self._counts = PanDataSet(self.HODOR_COUNTS_DOI, cachedir=dataset_folder)
+        # internally used pangaeapy datasets
+        self._counts = PanDataSet(self.HODOR_COUNTS_DOI, cachedir=self.dataset_folder)
+        self._video_data = PanDataSet(self.HODOR_VIDEO_DOI, enable_cache=False, cachedir=self.dataset_folder.joinpath("Camera"))
+        self._sonar_data = PanDataSet(self.HODOR_SONAR_DOI, enable_cache=False, cachedir=self.dataset_folder.joinpath("Sonar"))
 
         self.counts: pd.DataFrame = self._load_dataframe()
 
@@ -74,3 +76,28 @@ class HODOR_Dataset:
         df.insert(5, "sequence_length", df["DateTimeEnd"] - df["DateTimeStart"])
 
         return df
+
+    def download_video(self, sequence_ids: int | list[int]):
+        """Downloads the video data for a single sequence id or a list of ids."""
+        if isinstance(sequence_ids, int):
+            sequence_ids = [sequence_ids]
+        self._video_data.download(sequence_ids)
+
+    def download_sonar(self, sequence_ids: int | list[int]):
+        """Downloads the sonar data for a single sequence id or a list of ids."""
+        if isinstance(sequence_ids, int):
+            sequence_ids = [sequence_ids]
+        self._sonar_data.download(sequence_ids)
+
+    def download_sequence(self, sequence_ids: int | list[int]):
+        """Downloads the complete data for a single sequence id or a list of ids.
+
+        This will include the stereo video as well as the sonar data for this sequence.
+        To download only the video data, use `download_video` instead.
+        To download only the sonar data, use `download_sonar` instead.
+        """
+        if isinstance(sequence_ids, int):
+            sequence_ids = [sequence_ids]
+            
+        self.download_video(sequence_ids)
+        self.download_sonar(sequence_ids)
