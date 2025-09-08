@@ -58,11 +58,50 @@ Download this repo and place the datasets folders as shown:
 Download the tab delimited files at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). In this files, the download links for the camera, sonar and abundancy data are given. You can either download the complete (sub-) datasets or single files.
 
 ## Explore and interact with the dataset using our starter tools:
-<!--
+
 ### 🐍 Python
 
-* hashCheck.py: Test for integrity of the dataset
--->
+The HODOR dataset includes a Python API for easy data access and analysis. The API provides a pandas-based interface for working with the dataset metadata and species activity counts.
+
+#### Installation
+
+Navigate to the `meta/hodor_python` directory and install the package:
+
+```bash
+cd meta/hodor_python
+pip install .
+```
+
+#### Quick Start
+
+```python
+from hodor_python.dataset import HODOR_Dataset, Species
+import pandas as pd
+
+# Create dataset instance (downloads metadata automatically)
+hodor = HODOR_Dataset(dataset_folder="HODOR")
+
+# Access activity counts as pandas DataFrame
+print(hodor.counts.head())
+
+# Filter by species activity
+cod_sequences = hodor.counts[hodor.counts[Species.FISH_COD] > 0]
+
+# Get sequences with high activity
+busy_sequences = hodor.counts[hodor.counts.iloc[:, 6:].sum(axis=1) > 50]
+```
+
+#### Features
+
+* **Easy data access**: Load HODOR metadata into pandas DataFrames
+* **Species filtering**: Built-in Species enum for consistent filtering
+* **Automatic downloads**: Integration with pangaeapy for seamless data retrieval
+* **Example notebooks**: Complete usage examples in `meta/hodor_python/notebooks/`
+  - `download_data.ipynb`: How to download specific sequences
+  - `usage_examples.ipynb`: Data analysis and visualization examples
+
+For detailed Python API documentation and advanced usage examples, see the [Python API README](meta/hodor_python/README.md).
+
 ### 🧠 MATLAB
 
 * visualizeSequence.m: Display all sensor data at the same time (see example-gif above)
