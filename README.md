@@ -97,9 +97,9 @@ cod_sequences = hodor.counts[hodor.counts[Species.FISH_COD] > 0]
 * **Easy data access**: Load HODOR metadata into pandas DataFrames
 * **Species filtering**: Built-in Species enum for consistent filtering
 * **Automatic downloads**: Integration with [pangaeapy](https://github.com/pangaea-data-publisher/pangaeapy) for seamless data retrieval
-* **Example notebooks**: Complete usage examples in `meta/hodor_python`
-  - `download_data.ipynb`: How to download specific sequences
-  - `usage_examples.ipynb`: Data analysis and visualization examples
+* **Example notebooks**: Complete usage examples in [`meta/hodor_python`](https://github.com/TAWilts/HODOR/tree/main/meta/hodor_python)
+  - [`download_data.ipynb`](https://github.com/TAWilts/HODOR/blob/main/meta/hodor_python/notebooks/download_data.ipynb): How to download specific sequences
+  - [`usage_examples.ipynb`](https://github.com/TAWilts/HODOR/blob/main/meta/hodor_python/notebooks/usage_examples.ipynb): Data analysis and visualization examples
 
 
 ### 🧠 MATLAB
