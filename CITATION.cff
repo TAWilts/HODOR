@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use the HODOR dataset in your research, please cite it."
+authors:
+- family-names: "Wilts"
+  given-names: "Thomas"
+- family-names: "Böer"
+  given-names: "Gordon"
+- family-names: "Winkler"
+  given-names: "Julian"
+- family-names: "Cisewski"
+  given-names: "Boris"
+- family-names: "Schramm"
+  given-names: "Hauke"
+- family-names: "Badri-Höher"
+  given-names: "Sabah"
+title: "Descriptor: Hydroacoustic and Optical Dataset for Oceanic Research (HODOR)"
+preferred-citation:
+  type: article
+  title: "Descriptor: Hydroacoustic and Optical Dataset for Oceanic Research (HODOR)"
+  doi: 10.1109/IEEEDATA.2025.3596913
+  url: https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
+  journal: IEEE Data Descriptions
+  authors:
+    - family-names: "Wilts"
+      given-names: "Thomas"
+    - family-names: "Böer"
+      given-names: "Gordon"
+    - family-names: "Winkler"
+      given-names: "Julian"
+    - family-names: "Cisewski"
+      given-names: "Boris"
+    - family-names: "Schramm"
+      given-names: "Hauke"
+    - family-names: "Badri-Höher"
+      given-names: "Sabah"
+  year: 2025
