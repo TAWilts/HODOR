@@ -34,44 +34,18 @@ A sequence continues recording as long as any kind of fish activity can be obser
 This activity-based segmentation ensures that each sequence captures complete behavioral events, making the dataset particularly valuable for studying natural fish behavior patterns and movement dynamics in their marine habitat.
 
 
-## 📄 Cite Us
+## 🚀 How to Access the Data
 
-If you use HODOR in your research, please cite:
+### Using the [hodor-python](https://pypi.org/project/hodor-python/) Package (Recommended)
 
-```bibtex
-@ARTICLE{11121653,
-  author={Wilts, Thomas and Böer, Gordon and Winkler, Julian and Cisewski, Boris and Schramm, Hauke and Badri-Hoeher, Sabah},
-  journal={IEEE Data Descriptions}, 
-  title={Descriptor: Hydroacoustic and Optical Dataset for Oceanic Research (HODOR)}, 
-  year={2025},
-  volume={2},
-  number={},
-  pages={262-270},
-  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Biomedical optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements;Baltic Sea;camera;sonar;stereo camera},
-  doi={10.1109/IEEEDATA.2025.3596913}}
-```
-
-## Data Availability
-
-🔹 The dataset is published at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
-
-🔹 Read the paper: [https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf](https://ieeexplore.ieee.org/document/11121653)
-
-🔹 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
-
-
-### Download Methods
-
-**Option 1: Using hodor-python package (Recommended)**
-
-The preferred approach is to use the **hodor-python** package [detailed below](#dataset-tools). 
+The preferred approach is to use the **hodor-python** package [detailed below](#tools---examples). 
 
 This allows you to:
 - Filter and identify sequences of interest (e.g., by specific species activity)
 - Download only the sequences you need using the built-in download functions
 - Automatically handle metadata and file organization
 
-**Option 2: Direct download from PANGAEA**
+### Direct Download from PANGAEA
 
 Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). This metadata file contains download links for camera, sonar, and abundance data.
 
@@ -85,7 +59,7 @@ Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.9
 - **Sonar videos**: `https://download.pangaea.de/dataset/980002/files/sonar_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
   - Example: [https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4](https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4)
 
-## Dataset tools:
+## 🛠️ Tools & Examples
 
 ### 🐍 Python
 
@@ -152,3 +126,28 @@ We welcome your feedback, questions, and contributions!
 Let’s build the future of underwater perception—together. 🌊🤿
 
 
+## Data Availability
+
+🔹 The dataset is published at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
+
+🔹 Read the paper: [https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf](https://ieeexplore.ieee.org/document/11121653)
+
+🔹 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
+
+
+## 📄 Cite Us
+
+If you use HODOR in your research, please cite:
+
+```bibtex
+@ARTICLE{11121653,
+  author={Wilts, Thomas and Böer, Gordon and Winkler, Julian and Cisewski, Boris and Schramm, Hauke and Badri-Hoeher, Sabah},
+  journal={IEEE Data Descriptions}, 
+  title={Descriptor: Hydroacoustic and Optical Dataset for Oceanic Research (HODOR)}, 
+  year={2025},
+  volume={2},
+  number={},
+  pages={262-270},
+  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Biomedical optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements;Baltic Sea;camera;sonar;stereo camera},
+  doi={10.1109/IEEEDATA.2025.3596913}}
+```
