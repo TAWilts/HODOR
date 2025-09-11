@@ -38,18 +38,16 @@ This activity-based segmentation ensures that each sequence captures complete be
 
 If you use HODOR in your research, please cite:
 
-This is currently the early access version of the paper:
-
 ```bibtex
 @ARTICLE{11121653,
   author={Wilts, Thomas and Böer, Gordon and Winkler, Julian and Cisewski, Boris and Schramm, Hauke and Badri-Hoeher, Sabah},
   journal={IEEE Data Descriptions}, 
   title={Descriptor: Hydroacoustic and Optical Dataset for Oceanic Research (HODOR)}, 
   year={2025},
-  volume={},
+  volume={2},
   number={},
-  pages={1-9},
-  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements},
+  pages={262-270},
+  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Biomedical optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements;Baltic Sea;camera;sonar;stereo camera},
   doi={10.1109/IEEEDATA.2025.3596913}}
 ```
 
@@ -57,7 +55,7 @@ This is currently the early access version of the paper:
 
 🔹 The dataset is published at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
 
-🔹 Read the paper (Early Access): https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
+🔹 Read the paper: [https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf](https://ieeexplore.ieee.org/document/11121653)
 
 🔹 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
