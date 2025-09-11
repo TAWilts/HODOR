@@ -5,6 +5,19 @@
 
 Welcome to the official repository of the **HODOR dataset**, a unique long-term multimodal underwater dataset combining synchronized forward-looking sonar and stereo camera data, collected in the Baltic Sea via the autonomous [UFO (Underwater Fish Observatory)](https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2024.1425259/full) platform. HODOR supports research in object detection, tracking, and sensor fusion in challenging underwater environments.
 
+---
+
+## 📚 Table of Contents
+
+- [What's Inside](#-whats-inside)
+- [Sequence Lengths](#-sequence-lengths)
+- [How to Access the Data](#-how-to-access-the-data)
+- [Tools & Examples](#-tools)
+- [Join the Discussion](#-join-the-discussion)
+- [Data Availability](#data-availability)
+- [Cite Us](#-cite-us)
+
+---
 
 ## 📦 What's Inside
 <figure>
@@ -61,7 +74,7 @@ Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.9
 - **Sonar videos**: `https://download.pangaea.de/dataset/980002/files/sonar_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
   - Example: [https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4](https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4)
 
-## 🛠️ Tools & Examples
+## 🚀 Tools
 
 ### 🐍 Python
 
