@@ -15,8 +15,11 @@ Welcome to the official repository of the **HODOR dataset**, a unique long-term 
 <br/><br/>
 
 🔹 Synchronized imaging sonar and stereo camera data
+
 🔹 About 430 hours of continuous sequences per sensor
+
 🔹 Associated abiotic measurements (e.g., CTD, ADCP, fluorometer) 
+
 🔹 Machine-learning-based annotations (coming soon)
 
 ## 📏 Sequence Lengths
@@ -53,7 +56,9 @@ This is currently the early access version of the paper:
 ## Data Availability
 
 🔹 The dataset is published at PANGAEA: [https://doi.org/10.1594/PANGAEA.980000](https://doi.org/10.1594/PANGAEA.980000)
+
 🔹 Read the paper (Early Access): https://ieeexplore.ieee.org/ielx8/10347231/10677474/11121653.pdf
+
 🔹 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
 
@@ -107,8 +112,8 @@ print(hodor.counts.head())
 # Filter by species activity
 cod_sequences = hodor.counts[hodor.counts[Species.FISH_COD] > 0]
 
-# Download Video and Sonar videos for a specific sequence id
-hodor.download_video(42)
+# Download Video and Sonar videos for a specific sequence id (42)
+hodor.download_sequence(42)
 ```
 
 #### Features
