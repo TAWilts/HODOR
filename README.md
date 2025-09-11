@@ -14,7 +14,7 @@ Welcome to the official repository of the **HODOR dataset**, a unique long-term 
 </figure>
 <br/><br/>
 
-🔹 Synchronized imaging sonar and stereo camera data
+🔹 5850 synchronized sequences of imaging sonar and stereo camera data
 
 🔹 About 430 hours of continuous sequences per sensor
 
@@ -73,9 +73,15 @@ The preferred approach is to use the **hodor-python** package detailed below. Th
 
 Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). This metadata file contains download links for camera, sonar, and abundance data.
 
-- **Single file downloads**: Use the individual file links in the metadata - no registration required
-- **Bulk downloads**: Download the complete dataset at once from PANGAEA, which requires a free PANGAEA registration first
+**Bulk Downloads (PANGAEA registration required):**
+- **All camera data**: [ZIP](https://download.pangaea.de/dataset/980001/allfiles.zip) | [TAR](https://download.pangaea.de/dataset/980001/allfiles.tar)
+- **All sonar data**: [ZIP](https://download.pangaea.de/dataset/980002/allfiles.zip) | [TAR](https://download.pangaea.de/dataset/980002/allfiles.tar)
 
+**Single File Downloads (no registration required):**
+- **Camera videos**: `https://download.pangaea.de/dataset/980001/files/cam1_XXXX.mp4` or `cam2_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
+  - Example: [https://download.pangaea.de/dataset/980001/files/cam1_0042.mp4](https://download.pangaea.de/dataset/980001/files/cam1_0042.mp4)
+- **Sonar videos**: `https://download.pangaea.de/dataset/980002/files/sonar_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
+  - Example: [https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4](https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4)
 
 ## Explore and interact with the dataset using our starter tools:
 
