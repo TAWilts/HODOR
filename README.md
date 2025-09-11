@@ -64,7 +64,9 @@ If you use HODOR in your research, please cite:
 
 **Option 1: Using hodor-python package (Recommended)**
 
-The preferred approach is to use the **hodor-python** package detailed below. This allows you to:
+The preferred approach is to use the **hodor-python** package [detailed below](#dataset-tools). 
+
+This allows you to:
 - Filter and identify sequences of interest (e.g., by specific species activity)
 - Download only the sequences you need using the built-in download functions
 - Automatically handle metadata and file organization
@@ -83,7 +85,7 @@ Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.9
 - **Sonar videos**: `https://download.pangaea.de/dataset/980002/files/sonar_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
   - Example: [https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4](https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4)
 
-## Explore and interact with the dataset using our starter tools:
+## Dataset tools:
 
 ### 🐍 Python
 
