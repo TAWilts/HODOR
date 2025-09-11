@@ -49,6 +49,8 @@ This allows you to:
 
 Download the tab-delimited metadata at [https://doi.pangaea.de/10.1594/PANGAEA.980000](https://doi.pangaea.de/10.1594/PANGAEA.980000). This metadata file contains download links for camera, sonar, and abundance data.
 
+![pangaea](repoFiles/pangaeapy.png)
+
 **Bulk Downloads (PANGAEA registration required):**
 - **All camera data**: [ZIP](https://download.pangaea.de/dataset/980001/allfiles.zip) | [TAR](https://download.pangaea.de/dataset/980001/allfiles.tar)
 - **All sonar data**: [ZIP](https://download.pangaea.de/dataset/980002/allfiles.zip) | [TAR](https://download.pangaea.de/dataset/980002/allfiles.tar)
