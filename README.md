@@ -5,6 +5,20 @@
   [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TAWilts/HODOR)
 
 Welcome to the official repository of the **HODOR dataset**, a unique long-term multimodal underwater dataset combining synchronized forward-looking sonar and stereo camera data, collected in the Baltic Sea via the autonomous [UFO (Underwater Fish Observatory)](https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2024.1425259/full) platform. HODOR supports research in object detection, tracking, and sensor fusion in challenging underwater environments.
+
+
+## 📏 Sequence Lengths
+
+The individual sequences in HODOR are of **variable length**, ranging from as short as 1 minute up to several hours. This variability is by design, i.e. each sequence duration is determined by observed biological activity rather than fixed time intervals.
+
+A sequence continues recording as long as any kind of fish activity can be observed in the sensor data. This means:
+
+* **Short sequences** (1-10 minutes): Brief encounters with individual fish or small groups
+* **Long sequences** (hours): Persistent activity, such as when schools of small fish remain in the observation area for extended periods
+
+This activity-based segmentation ensures that each sequence captures complete behavioral events, making the dataset particularly valuable for studying natural fish behavior patterns and movement dynamics in their marine habitat.
+
+
 ## 📄 Cite Us
 
 If you use HODOR in your research, please cite:
@@ -20,7 +34,7 @@ This is currently the early access version of the paper:
   volume={},
   number={},
   pages={1-9},
-  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Biomedical optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements},
+  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements},
   doi={10.1109/IEEEDATA.2025.3596913}}
 ```
 ## 📦 What's Inside
@@ -90,6 +104,8 @@ print(hodor.counts.head())
 # Filter by species activity
 cod_sequences = hodor.counts[hodor.counts[Species.FISH_COD] > 0]
 
+# Download Video and Sonar videos for a specific sequence id
+hodor.download_video(42)
 ```
 
 #### Features
