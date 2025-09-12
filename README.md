@@ -1,4 +1,5 @@
 [![DOI](https://img.shields.io/badge/DOI-10.1594%2FPANGAEA.980000-darkgreen)](https://doi.org/10.1594/PANGAEA.980000)
+[![DOI](https://img.shields.io/badge/DOI-10.1109%2FIEEEDATA.2025.3596913-darkgreen)](https://doi.org/10.1109/IEEEDATA.2025.3596913)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TAWilts/HODOR)
 
 # 🐟 HODOR: Hydroacoustic and Optical Dataset for Oceanic Research
