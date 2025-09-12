@@ -51,7 +51,7 @@ This activity-based segmentation ensures that each sequence captures complete be
 
 ### Using the [hodor-python](https://pypi.org/project/hodor-python/) Package (Recommended)
 
-The preferred approach is to use the **hodor-python** package [detailed below](#tools---examples). 
+The preferred approach is to use the **hodor-python** package [detailed below](#-tools). 
 
 This allows you to:
 - Filter and identify sequences of interest (e.g., by specific species activity)
@@ -80,7 +80,7 @@ In a nutshell, this is how it can be done:
 - **Sonar videos**: `https://download.pangaea.de/dataset/980002/files/sonar_XXXX.mp4` where XXXX is the sequence ID (0000-5849)
   - Example: [https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4](https://download.pangaea.de/dataset/980002/files/sonar_0042.mp4)
 
-## 🚀 Tools
+## 🔧 Tools
 
 ### 🐍 Python
 
