@@ -156,6 +156,38 @@ Let’s build the future of underwater perception—together. 🌊🤿
 
 🔹 The associated abiotic measurements: [https://doi.org/10.1594/PANGAEA.973019](https://doi.org/10.1594/PANGAEA.973019)
 
+## Discrepancy Between Published Species Counts and HODOR Metadata
+
+The species counts listed in **Table 1** of the HODOR publication were **adopted from** the previous study <sup>[[1]](https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2024.1425259/full)</sup>.
+These values were derived using the **hybrid estimation algorithm** described in that work, which combines the camera-based *MaxN* detections with sonar detections and extrapolates the near-field (camera) observations to a larger field of view.
+
+In contrast, the **metadata provided with the HODOR dataset** contains only the **partially filtered camera-based MaxN counts**, without the extrapolated sonar component.  
+Consequently, the **absolute species counts** obtained when analyzing the released dataset will differ from those reported in the publication’s Table 1.
+
+Additionally, the naming conventions in the metadata differ slightly from those used in the publication.  
+The following mappings apply:
+
+| Metadata label | Publication name |
+|----------------|------------------|
+| fish_unspecified | *Unspecified fish* |
+| fish_clupeidae | *Clupeidae* |
+| fish_cod | *Gadus morhua* |
+| fish_mackerel | *Scomber scombrus* |
+| fish_salmonidae | *Salmonidae* |
+| fish_pipefish | *Syngnathinae* |
+| fish_plaice | *Pleuronectes platessa* |
+| fish_scad | *Trachurus trachurus* |
+| jellyfish_unspecified | *Unspecified jellyfish* |
+| jellyfish_ctenophora | *Mnemiopsis leidyi* |
+| jellyfish_cyanea | *Cyanea sp.* |
+| jellyfish_aurelia | *Aurelia aurita* |
+| bird_cormorant | *Cormorant* |
+| crab_crustacea | *Crustacea* |
+
+Finally, due to quality-based filtering in the released HODOR dataset, the following species reported in the publication are **not present in the available video material**:  
+*Anguilla anguilla* (previously reported with one occurrence).
+
+
 
 ## 📄 Cite Us
 
