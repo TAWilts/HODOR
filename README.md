@@ -202,6 +202,6 @@ If you use HODOR in your research, please cite:
   volume={2},
   number={},
   pages={262-270},
-  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Biomedical optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements;Baltic Sea;camera;sonar;stereo camera},
+  keywords={Sonar;Cameras;Optical sensors;Optical imaging;Fish;Optical recording;Acoustics;Synchronization;Sonar measurements;Baltic Sea;camera;sonar;stereo camera},
   doi={10.1109/IEEEDATA.2025.3596913}}
 ```
