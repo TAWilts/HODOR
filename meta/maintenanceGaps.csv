@@ -1,0 +1,5 @@
+Start time of anomaly;End time of anomaly;Seq.no. of anomaly start;Seq.no. of anomaly end;Reason
+2021_08_30_08_55_05;2021_08_30_09_06_28;332;333;Maintainance by diver
+2021_10_26_08_35_22;2021_10_26_09_33_05;4890;4891;Maintainance by diver and shutdown 
+2021_11_02_08_18_24;2021_11_02_10_41_13;5270;5271;Maintainance by retrieval
+2021_11_02_10_41_13;2021_11_02_11_25_23;5271;5276;Redeployment (cloudy waters), boat and readjustment of sensor platform
