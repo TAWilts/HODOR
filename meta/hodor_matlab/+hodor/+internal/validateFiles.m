@@ -182,6 +182,17 @@ for id = unique(files.SeqID).'
             report = flag(report,idx(j),"WARN","No common temporal overlap between sensors");
         end
     end
+    if level=="deep"
+        % Only a coverage-drift heuristic: asynchronous sensor frame times
+        % and missing frames prevent inferring physical clock calibration.
+        relativeShift = (t1-t0(1))-(t0-t0(1));
+        if max(relativeShift)-min(relativeShift) > max(2,0.005*median(t1-t0))
+            for j=1:numel(idx)
+                report = flag(report,idx(j),"WARN", ...
+                    "Sensor temporal coverage shifted unusually during sequence");
+            end
+        end
+    end
 end
 end
 
