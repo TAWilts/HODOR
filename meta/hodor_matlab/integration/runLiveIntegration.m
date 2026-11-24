@@ -14,7 +14,7 @@ arguments
     opts.Download (1,1) logical = false
     opts.IncludeSonar (1,1) logical = false
     opts.Deep (1,1) logical = false
-    opts.CandidateIDs (1,:) double {mustBeInteger,mustBeNonnegative,mustBeFinite} = []
+    opts.CandidateIDs (1,:) double {mustBeInteger,mustBeNonnegative,mustBeFinite} = zeros(1,0)
     opts.MaxCandidates (1,1) double {mustBeInteger,mustBePositive,mustBeFinite} = 5
     opts.MaxBytes (1,1) double {mustBeInteger,mustBePositive,mustBeFinite} = 100*1024^2
     opts.Timeout (1,1) double {mustBePositive,mustBeFinite} = 60
