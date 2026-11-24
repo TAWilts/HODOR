@@ -129,9 +129,10 @@ classdef HODORDataset < handle
                 opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
+                opts.RecordSHA256 (1,1) logical = false
                 opts.RetryDelay (1,1) double {mustBeNonnegative} = 5
             end
-            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay);
+            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256);
         end
 
         function result = downloadVideo(obj,ids,opts)
@@ -140,8 +141,9 @@ classdef HODORDataset < handle
                 ids
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
+                opts.RecordSHA256 (1,1) logical = false
             end
-            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,5);
+            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,5,opts.RecordSHA256);
         end
 
         function result = downloadSonar(obj,ids,opts)
@@ -150,8 +152,37 @@ classdef HODORDataset < handle
                 ids
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
+                opts.RecordSHA256 (1,1) logical = false
             end
-            result = obj.download(ids,"sonar",opts.Force,opts.Validate,5);
+            result = obj.download(ids,"sonar",opts.Force,opts.Validate,5,opts.RecordSHA256);
+        end
+
+        function report = recordChecksums(obj,ids,opts)
+            %RECORDCHECKSUMS Explicitly establish local SHA-256 baselines.
+            % Existing references are verified, never overwritten.
+            arguments
+                obj
+                ids
+                opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
+                opts.SaveReport (1,1) logical = true
+            end
+            files = obj.checksumManifest(ids,opts.Sensors);
+            report = hodor.internal.checksumFiles(obj.DatasetFolder,files,"record","local");
+            if opts.SaveReport, obj.saveChecksumReport(report,"checksum_record.csv"); end
+        end
+
+        function report = verifyChecksums(obj,ids,opts)
+            %VERIFYCHECKSUMS Compare local files against recorded SHA-256 baselines.
+            % No baseline is created or updated by verification.
+            arguments
+                obj
+                ids
+                opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
+                opts.SaveReport (1,1) logical = true
+            end
+            files = obj.checksumManifest(ids,opts.Sensors);
+            report = hodor.internal.checksumFiles(obj.DatasetFolder,files,"verify");
+            if opts.SaveReport, obj.saveChecksumReport(report,"checksum_verify.csv"); end
         end
 
         function report = validateSequence(obj,id,opts)
@@ -161,9 +192,11 @@ classdef HODORDataset < handle
                 opts.Level (1,1) string = "standard"
                 opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
                 opts.SaveReport (1,1) logical = false
+                opts.CheckSHA256 (1,1) logical = false
             end
             report = obj.validateDataset('IDs',id,'Level',opts.Level, ...
-                'Sensors',opts.Sensors,'OnlyLocal',false,'SaveReport',opts.SaveReport);
+                'Sensors',opts.Sensors,'OnlyLocal',false,'SaveReport',opts.SaveReport, ...
+                'CheckSHA256',opts.CheckSHA256);
         end
 
         function report = validateDataset(obj,opts)
@@ -173,6 +206,7 @@ classdef HODORDataset < handle
                 opts.Level (1,1) string = "quick"
                 opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
                 opts.OnlyLocal (1,1) logical = true
+                opts.CheckSHA256 (1,1) logical = false
                 opts.SaveReport (1,1) logical = true
             end
             ids = opts.IDs;
@@ -189,6 +223,24 @@ classdef HODORDataset < handle
                 files = files(ismember(files.SeqID,ids),:);
             end
             report = hodor.internal.validateFiles(files,obj.sequences,opts.Level);
+            if opts.CheckSHA256
+                hashes = hodor.internal.checksumFiles(obj.DatasetFolder,files,"verify");
+                report.ChecksumStatus = hashes.Status;
+                report.ExpectedSHA256 = hashes.ExpectedSHA256;
+                report.ActualSHA256 = hashes.ActualSHA256;
+                for k = 1:height(report)
+                    if hashes.Status(k)=="MATCH", continue; end
+                    if hashes.Status(k)=="NO_BASELINE"
+                        if report.Status(k)=="PASS", report.Status(k)="WARN"; end
+                    else
+                        report.Status(k)="FAIL";
+                    end
+                    if strlength(report.Message(k))>0
+                        report.Message(k)=report.Message(k)+"; ";
+                    end
+                    report.Message(k)=report.Message(k)+hashes.Message(k);
+                end
+            end
             if opts.SaveReport && ~isempty(report)
                 reportFolder = fullfile(obj.DatasetFolder,'reports');
                 if ~isfolder(reportFolder), mkdir(reportFolder); end
@@ -198,6 +250,19 @@ classdef HODORDataset < handle
     end
 
     methods (Access=private)
+        function files = checksumManifest(obj,ids,sensors)
+            % Deliberately avoid PANGAEA size metadata for local hash operations.
+            ids = obj.normalizeIDs(ids);
+            sensors = obj.normalizeSensors(sensors);
+            files = hodor.internal.fileManifest(obj.DatasetFolder,obj.sequences,ids,sensors,table());
+        end
+
+        function saveChecksumReport(obj,report,name)
+            folder = fullfile(obj.DatasetFolder,'reports');
+            if ~isfolder(folder), mkdir(folder); end
+            writetable(report,fullfile(folder,name));
+        end
+
         function ids = normalizeIDs(obj,ids)
             arguments
                 obj
@@ -276,7 +341,7 @@ classdef HODORDataset < handle
             end
         end
 
-        function result = download(obj,ids,sensors,force,validate,retryDelay)
+        function result = download(obj,ids,sensors,force,validate,retryDelay,recordSHA256)
             if ~obj.AllowNetwork, error('hodor:Offline','Downloads require network access.'); end
             ids = obj.normalizeIDs(ids);
             sensors = obj.normalizeSensors(sensors);
@@ -314,6 +379,15 @@ classdef HODORDataset < handle
                 end
             end
             writetable(allResults,filename);
+            if recordSHA256 && any(status=="DOWNLOADED")
+                hashes = hodor.internal.checksumFiles(obj.DatasetFolder, ...
+                    files(status=="DOWNLOADED",:),"record","download");
+                obj.saveChecksumReport(hashes,"checksum_download.csv");
+                if any(~ismember(hashes.Status,["RECORDED","MATCH"]))
+                    warning('hodor:ChecksumDownload', ...
+                        'Some downloaded files differ from local baselines or could not be hashed; inspect checksum_download.csv.');
+                end
+            end
             if validate && n>0
                 obj.validateDataset('IDs',ids,'Level','quick', ...
                     'Sensors',sensors,'OnlyLocal',false,'SaveReport',true);

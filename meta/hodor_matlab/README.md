@@ -39,12 +39,52 @@ report = ds.validateDataset('Level','quick'); % Local sequences only.
 | `ds.validateSequence(id,...)` | Full list of selected files for one sequence; missing files reported as failures |
 | `ds.validateDataset(...)` | Check local sequences by default, or use `'OnlyLocal',false` to include all expected files |
 | `ds.refreshMetadata()` | Explicitly refresh metadata from the official sources |
+| `ds.recordChecksums(ids,...)` | Establish or compare local SHA-256 references |
+| `ds.verifyChecksums(ids,...)` | Check files against local SHA-256 references |
 
 `ids` can be a sequence ID scalar or vector, IDs **0 through 5849**. Select individual sensors with `'Sensors', ["sonar","cam1"]`. Downloads have optional `'Force',true` and `'Validate',false` arguments. Validation supports `'Level','quick'`, `'standard'`, or `'deep'` and optional `'SaveReport',true`.
 
 `ds.findSequences` returns a table; get an ID vector with `interesting.SeqID`.
 
 The PANGAEA count tables are **camera-based, partially filtered MaxN counts**, not the extrapolated totals from Table 1 of the publication. This distinction is described in the repository's main README.
+
+## Local SHA-256 integrity baselines
+
+A local SHA-256 manifest detects later changes to files, including changes that leave their byte count unchanged. It does **not** establish that the original files matched an independently published PANGAEA checksum.
+
+```matlab
+% Optional: record checksums of newly downloaded files.
+ds.downloadSequence(42,'RecordSHA256',true);
+
+% Explicitly establish a baseline for existing local files.
+r = ds.recordChecksums(42);
+
+% Check stored baselines without modifying them or fetching PANGAEA sizes.
+r = ds.verifyChecksums(42);
+
+% Include local checksum verification in ordinary validation.
+r = ds.validateSequence(42,'Level','quick','CheckSHA256',true);
+
+% Restrict a check to particular sensors or multiple sequences.
+r = ds.verifyChecksums([42 43],'Sensors',["cam1","cam2"]);
+```
+
+All three download methods accept `'RecordSHA256',true`. This opt-in hashes only newly completed transfers, never implicitly trusts files skipped by the downloader. For previously downloaded or imported data, explicitly call `recordChecksums` after checking that the files are suitable as a reference. Pass `ds.sequences.sequenceNo` to select every sequence; missing expected files are reported, not downloaded.
+
+References are stored in `meta/checksums_sha256.tsv` in the local dataset, with portable relative paths, SHA-256, byte count, UTC timestamp and origin (`local` or `download`). Preserve an independent backup of this file. The manifest is validated before updating and newly recorded entries never replace existing references, including after forced re-downloads. A mismatch is reported even when the byte count is unchanged. Use one writer per dataset; concurrent modification of files or manifests is unsupported. If a legitimate new dataset revision requires a new baseline, archive the old manifest separately and deliberately establish a new one.
+
+| Checksum status | Meaning |
+| --- | --- |
+| `RECORDED` | New local reference established explicitly or after an opted-in download |
+| `MATCH` | Current bytes match an existing local reference |
+| `MISMATCH` | Current bytes differ; reference preserved |
+| `NO_BASELINE` | File exists, but has no stored local reference |
+| `MISSING` / `EMPTY` | File absent / empty |
+| `ERROR` | Hashing failed; inspect diagnostic message |
+
+`recordChecksums` and `verifyChecksums` write separate CSV reports by default (disable with `'SaveReport',false`). Automatic download recording writes `reports/checksum_download.csv` for new transfers and warns on mismatches or hash failures; the download result still describes the transport outcome. Neither operation modifies media. `'CheckSHA256',true` on either validation API adds three checksum columns; a mismatch or hashing failure is `FAIL`, a missing reference is at least `WARN`, and a matching local reference does **not** remove other warnings, including unknown published sizes.
+
+Hashing streams files in 1 MiB blocks using SHA-256 from MATLAB's bundled Java runtime (a JVM-enabled MATLAB session is required). Hashing can be I/O-intensive on large datasets, so normal download and quick/standard/deep validation behavior is unchanged unless the checksum options are enabled.
 
 ## Validation levels
 
