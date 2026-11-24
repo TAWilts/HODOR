@@ -80,6 +80,27 @@ disp(results)
 
 Automated tests use local metadata with no network; a few create tiny videos using the platform's MPEG-4 `VideoWriter` profile and skip when that profile is unavailable. Before real-download integration, inspect the selected files' sizes and use a separate test dataset folder; start with one sensor. The historical `viewSequence.m` and `analyze_complete_set.m` remain unchanged in `meta/matlabTools`.
 
+### Opt-in live integration test
+
+The separate [live integration runner](integration/runLiveIntegration.m) checks real PANGAEA camera media without making the offline CI dependent on PANGAEA availability. From the repository root:
+
+```matlab
+addpath('meta/hodor_matlab/integration');
+preflight = runLiveIntegration(); % metadata + HEAD only; no media GET
+result = runLiveIntegration('Download',true); % stereo + timestamp sidecars
+% Optional complete sequence (only when all six HEAD requests succeed):
+% result = runLiveIntegration('Download',true,'IncludeSonar',true);
+```
+
+Each call creates a fresh temporary QA dataset and retains evidence under its `reports/` folder. By default, it considers at most five candidates (IDs 0, 2900, then short sequences), with a 100 MiB total advertised HEAD-size budget. Use `'CandidateIDs',[0 2900]` to restrict candidates, `'ParentFolder',folder` to select an existing scratch parent, or `'Deep',true` for an additional full-frame decoding test. `'MaxBytes'` is a **preflight** limit, not a hard streaming bandwidth cap; actual file sizes are checked after transfer. The runner requests at most one candidate's media per call, does not force downloads, and uses no media retries.
+
+- `READY`: HEAD preflight passed, with downloading disabled.
+- `BLOCKED`: no candidate passed HEAD preflight or a media GET returned a transient server status.
+- `FAIL`: an API, download, validation, transfer-size, or repeat-skip assertion failed.
+- `PASS`: requested files downloaded; local sizes matched HEAD, quick and standard validation had no failures, videos decoded, timestamps overlapped, and the repeat call skipped all files without modifying them. Review any validation warnings separately.
+
+Reports include `head_probes.csv`, `integration_summary.json`, download and repeat tables, transport-size comparison, and validation CSVs when the corresponding stages run. HEAD lengths are transport metadata, **not** independent published byte counts or cryptographic integrity evidence. No existing production dataset is used. The optional live runner is not part of `runtests('meta/hodor_matlab/tests')` or the automatic CI.
+
 ### GitHub Actions (R2026b)
 
 The [MATLAB Suite CI workflow](../../.github/workflows/matlab-suite.yml) runs the offline unit suite on a GitHub-hosted **Windows** runner using MATLAB **R2026b**. It triggers on pushes to `main`, pull requests targeting `main`, and manual dispatch when available. Feature-branch updates are covered by the pull-request event, avoiding duplicate Windows MATLAB jobs. It uses the official `matlab-actions/setup-matlab@v3` and `matlab-actions/run-tests@v3` actions.
