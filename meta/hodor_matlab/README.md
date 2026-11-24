@@ -54,15 +54,19 @@ The PANGAEA count tables are **camera-based, partially filtered MaxN counts**, n
 
 Report statuses: `PASS`, `WARN`, and `FAIL`. Timestamp/synchronization checks **do not** assume equal sonar and camera frame rates. Visual anomalies (very dark, overbright, high entropy) are warnings, *not* proof of data corruption.
 
+PANGAEA's text export can display rounded sizes such as `2.5 MBytes` under a `[Bytes]` column heading. These are kept as unknown expected sizes (`NaN`), so the validator reports `WARN` for present files. Only integer byte counts, including values such as `340 Bytes`, support exact size checks. Rounded values are never converted into purported exact byte counts. Sequence metadata retains `mergingFrames` as text because some entries contain semicolon-separated frame lists.
+
 Reports are written to `HODOR/reports/validation_<level>.csv` by default for `validateDataset`; the downloader keeps its latest per-file statuses in `HODOR/reports/download_manifest.csv`. For large runs, start with quick validation.
 
 ## Storage, download handling and limitations
 
-On the first access, the suite retrieves `meta/sequences.csv` from this repository (GitHub) and the published PANGAEA `.tsv` tables. Subsequent access uses local cache; call `refreshMetadata()` to update it. To use an entirely offline copy, initialize with `'AllowNetwork',false` and ensure the needed metadata are already cached under `meta/`.
+On the first access, the suite retrieves `meta/sequences.csv` from this repository (GitHub) and the published PANGAEA `.tsv` tables. Responses are parsed before replacing cached metadata, so an invalid refresh leaves the previous cache intact. Subsequent access uses local cache; call `refreshMetadata()` to update it. To use an entirely offline copy, initialize with `'AllowNetwork',false` and ensure the needed metadata are already cached under `meta/`.
 
 The directory layout is the same one referenced in the repository's canonical `sequences.csv` (local `camera/` and `sonar/` folders). The downloader uses PANGAEA's **per-file** URLs, which do not require bulk-download registration. Large bulk ZIP/TAR archives are intentionally not downloaded automatically.
 
 Downloads use temporary `.part` files, retry network errors and PANGAEA tape-retrieval responses, and request HTTP `Range` when partial data exist. If a server ignores `Range`, the incomplete download is discarded and restarted rather than appended. If the published byte size is available, completed files are checked against it before being moved to their final names. **Size equality does not provide cryptographic integrity verification.** Files with matching sizes are skipped; existing files with an unexpected size are preserved until a replacement successfully downloads.
+
+Resumed responses are staged separately and their `Content-Range` is checked before appending; temporary server errors preserve the existing partial file. Staging needs additional disk space for the resumed response. HTTP `Content-Length`, when supplied, is also checked before promotion, even when the published size is unavailable. Transport completeness alone does not establish dataset integrity.
 
 PANGAEA may need time to restore files from tape; failed files remain visible in the result table and may be retried by calling the method again. No background job is created. MATLAB's native `VideoReader` decoder determines which MP4 formats can be checked on each platform.
 
@@ -74,7 +78,7 @@ results = runtests('path/to/HODOR/meta/hodor_matlab/tests');
 disp(results)
 ```
 
-All automated tests use synthetic local metadata, with no network. For real-download integration, run `ds.downloadSequence(42)` followed by `ds.validateSequence(42,'Level','standard')` on a machine with MATLAB and network access. The historical `viewSequence.m` and `analyze_complete_set.m` remain unchanged in `meta/matlabTools`.
+Automated tests use local metadata with no network; a few create tiny videos using the platform's MPEG-4 `VideoWriter` profile and skip when that profile is unavailable. Before real-download integration, inspect the selected files' sizes and use a separate test dataset folder; start with one sensor. The historical `viewSequence.m` and `analyze_complete_set.m` remain unchanged in `meta/matlabTools`.
 
 ## Attribution
 

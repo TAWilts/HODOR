@@ -248,11 +248,26 @@ classdef HODORDataset < handle
             end
             dest = fullfile(obj.DatasetFolder,'meta',filename);
             if ~force && isfile(dest), return; end
-            tmp = dest+".part";
+            % A failed refresh must preserve the cache and unrelated partials.
+            tmp = string(tempname(fileparts(dest)))+".part";
             try
                 websave(tmp,url,weboptions('Timeout',obj.Timeout));
                 if ~isfile(tmp) || dir(tmp).bytes==0
                     error('hodor:EmptyMetadata','Empty metadata response.');
+                end
+                % A nonempty HTTP 200 response can still be an error page.
+                switch string(filename)
+                    case "sequences.csv"
+                        hodor.internal.readSequences(tmp);
+                    case "activity_counts.tsv"
+                        hodor.internal.readCounts(tmp);
+                    case {"camera_metadata.tsv","sonar_metadata.tsv"}
+                        [~,data] = hodor.internal.readTab(tmp,"SeqID");
+                        columns = 10;
+                        if string(filename)=="camera_metadata.tsv", columns = 14; end
+                        if isempty(data) || size(data,2)~=columns
+                            error('hodor:InvalidMetadata','Invalid PANGAEA metadata layout.');
+                        end
                 end
                 movefile(tmp,dest,'f');
             catch ME
