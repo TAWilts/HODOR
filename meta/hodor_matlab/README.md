@@ -82,7 +82,7 @@ Automated tests use local metadata with no network; a few create tiny videos usi
 
 ### GitHub Actions (R2026b)
 
-The [MATLAB Suite CI workflow](../../.github/workflows/matlab-suite.yml) runs the offline unit suite on a GitHub-hosted **Windows** runner using MATLAB **R2026b**. It triggers on pushes to `main` and `feature/matlab-hodor-suite`, pull requests targeting `main`, and manual dispatch when available. It uses the official `matlab-actions/setup-matlab@v3` and `matlab-actions/run-tests@v3` actions.
+The [MATLAB Suite CI workflow](../../.github/workflows/matlab-suite.yml) runs the offline unit suite on a GitHub-hosted **Windows** runner using MATLAB **R2026b**. It triggers on pushes to `main`, pull requests targeting `main`, and manual dispatch when available. Feature-branch updates are covered by the pull-request event, avoiding duplicate Windows MATLAB jobs. It uses the official `matlab-actions/setup-matlab@v3` and `matlab-actions/run-tests@v3` actions.
 
 - Test discovery is limited to `meta/hodor_matlab/tests`; the MATLAB source path is `meta/hodor_matlab`.
 - Failures appear in the GitHub Actions job summary; JUnit results and statement-coverage XML are uploaded as run artifacts (14-day retention).
