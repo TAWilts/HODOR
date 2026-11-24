@@ -1,6 +1,6 @@
 # HODOR MATLAB Suite
 
-A native MATLAB interface to the curated [HODOR dataset on PANGAEA](https://doi.org/10.1594/PANGAEA.980000), without a Python dependency. Requires **MATLAB R2022b or newer**. The base downloader, metadata readers, and validators use core MATLAB. Image Processing Toolbox is **not** required for these components.
+A native MATLAB interface to the curated [HODOR dataset on PANGAEA](https://doi.org/10.1594/PANGAEA.980000), without a Python dependency. **Verified locally on MATLAB R2026b (Windows)**; automated CI targets **R2026b**. Compatibility with older releases (including R2022b) has not yet been verified. The base downloader, metadata readers, and validators use core MATLAB. Image Processing Toolbox is **not** required for these components.
 
 This is a MATLAB companion to [hodor-python](https://github.com/gboeer/hodor_python), not a wrapper around it.
 
@@ -79,6 +79,17 @@ disp(results)
 ```
 
 Automated tests use local metadata with no network; a few create tiny videos using the platform's MPEG-4 `VideoWriter` profile and skip when that profile is unavailable. Before real-download integration, inspect the selected files' sizes and use a separate test dataset folder; start with one sensor. The historical `viewSequence.m` and `analyze_complete_set.m` remain unchanged in `meta/matlabTools`.
+
+### GitHub Actions (R2026b)
+
+The [MATLAB Suite CI workflow](../../.github/workflows/matlab-suite.yml) runs the offline unit suite on a GitHub-hosted **Windows** runner using MATLAB **R2026b**. It triggers on pushes to `main` and `feature/matlab-hodor-suite`, pull requests targeting `main`, and manual dispatch when available. It uses the official `matlab-actions/setup-matlab@v3` and `matlab-actions/run-tests@v3` actions.
+
+- Test discovery is limited to `meta/hodor_matlab/tests`; the MATLAB source path is `meta/hodor_matlab`.
+- Failures appear in the GitHub Actions job summary; JUnit results and statement-coverage XML are uploaded as run artifacts (14-day retention).
+- CI is deliberately **offline**: no PANGAEA media downloads or large-scale `deep` validation. Live camera/sonar integration must be verified separately.
+- A green CI result verifies the selected tests on the runner, **not** all of HODOR or other MATLAB releases. Inspect the job summary for incomplete/skipped codec tests.
+
+The initial local Windows R2026b QA reported 29/29 offline tests and 14/14 separate HTTP regressions. Only the committed offline MATLAB tests are run by this CI workflow; the local HTTP-mock harness is not part of the GitHub repository.
 
 ## Attribution
 
