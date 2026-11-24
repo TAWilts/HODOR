@@ -84,7 +84,7 @@ References are stored in `meta/checksums_sha256.tsv` in the local dataset, with 
 
 `recordChecksums` and `verifyChecksums` write separate CSV reports by default (disable with `'SaveReport',false`). Automatic download recording writes `reports/checksum_download.csv` for new transfers and warns on mismatches or hash failures; the download result still describes the transport outcome. Neither operation modifies media. `'CheckSHA256',true` on either validation API adds three checksum columns; a mismatch or hashing failure is `FAIL`, a missing reference is at least `WARN`, and a matching local reference does **not** remove other warnings, including unknown published sizes.
 
-Hashing streams files in 1 MiB blocks using SHA-256 from MATLAB's bundled Java runtime (a JVM-enabled MATLAB session is required). Hashing can be I/O-intensive on large datasets, so normal download and quick/standard/deep validation behavior is unchanged unless the checksum options are enabled.
+Hashing uses the operating system's native SHA-256 utility (Windows: Windows PowerShell `Get-FileHash`; Linux: `sha256sum`; macOS: `/usr/bin/shasum`). The corresponding command must be available. No Java runtime, Python, additional MATLAB toolbox, or full-file MATLAB memory allocation is required, including in a default R2026b installation. Files are passed as literal paths, not interpolated into shell commands. Run checksum operations serially within a MATLAB process. Hashing can be I/O-intensive on large datasets, so normal download and quick/standard/deep validation behavior is unchanged unless the checksum options are enabled.
 
 ## Validation levels
 

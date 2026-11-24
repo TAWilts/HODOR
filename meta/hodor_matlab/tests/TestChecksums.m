@@ -33,6 +33,25 @@ classdef TestChecksums < matlab.unittest.TestCase
             testCase.verifyEqual(hash,"ad4707187ce2c9c3d16909bd20eb1c440fa9d2717bff5b836db2d32f997da4d2");
             testCase.verifyEqual(bytes,2097408);
         end
+        function emptyHashVector(testCase)
+            p = testCase.mediaPath();
+            testCase.writeBinary(p,uint8([]));
+            [hash,bytes] = hodor.internal.sha256File(p);
+            testCase.verifyEqual(hash,"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+            testCase.verifyEqual(bytes,0);
+        end
+        function specialFilenameAndEnvironmentRestoration(testCase)
+            p = fullfile(testCase.Root,"a & b's 100% (test).bin");
+            testCase.writeBinary(p,uint8('abc'));
+            name = 'HODOR_SHA256_FILE';
+            previous = getenv(name);
+            restore = onCleanup(@()setenv(name,previous)); %#ok<NASGU>
+            setenv(name,'original sentinel value');
+            [hash,bytes] = hodor.internal.sha256File(p);
+            testCase.verifyEqual(hash,"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+            testCase.verifyEqual(bytes,3);
+            testCase.verifyEqual(getenv(name),'original sentinel value');
+        end
         function recordAndVerify(testCase)
             ds = testCase.dataset();
             testCase.writeBinary(testCase.mediaPath(),uint8([97 98 99 0 255]));
