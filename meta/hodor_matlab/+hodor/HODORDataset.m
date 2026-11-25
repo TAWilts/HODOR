@@ -131,6 +131,19 @@ classdef HODORDataset < handle
             end
         end
 
+        function files = listFiles(obj,ids,opts)
+            %LISTFILES Canonical per-file metadata, URLs and published sizes.
+            arguments
+                obj
+                ids
+                opts.Sensors (1,:) string = ["sonar","cam1","cam2"]
+            end
+            ids = obj.normalizeIDs(ids);
+            sensors = obj.normalizeSensors(opts.Sensors);
+            files = hodor.internal.fileManifest(obj.DatasetFolder,obj.sequences, ...
+                ids,sensors,obj.fileSizes());
+        end
+
         function result = downloadSequence(obj, ids, opts)
             arguments
                 obj

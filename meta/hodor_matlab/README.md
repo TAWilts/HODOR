@@ -25,6 +25,36 @@ report = ds.validateDataset('Level','quick'); % Local sequences only.
 
 `setup` adds this folder to the MATLAB path; the `+hodor` folder must remain inside `meta/hodor_matlab`. The example `examples/quickstart.m` includes a basic metadata/filters workflow.
 
+## Full download and storage-efficient processing
+
+Add the examples directory to the MATLAB path:
+
+```matlab
+addpath('meta/hodor_matlab/examples');
+
+% Test a small selection first:
+r = download_all("D:\HODOR",'IDs',[0 1],'Sensors',"sonar");
+
+% All 5,850 sequences, up to 35,100 files:
+r = download_all("D:\HODOR",'ConfirmFullDownload',true);
+```
+
+The full downloader uses batches of ten sequences by default (set BatchSize to change this), the existing retry queue, progress bar and normal per-file download manifest. Rerunning skips already present files according to the ordinary downloader's size checks. Failed files are reported; rerun to retry them. Check available disk space before beginning. RecordSHA256 is optional, and validation can be run separately afterward.
+
+For limited storage, process the dataset one file at a time:
+
+```matlab
+% Smoke test with the included frame/TXT statistics processor:
+r = process_all("D:\HODOR_processing",[],'IDs',0,'Sensors',"sonar");
+
+% Every individual MP4 and TXT, using your own processor:
+r = process_all("D:\HODOR_processing",@myProcessor,'ConfirmFullDownload',true);
+```
+
+A processor receives a one-row manifest table; use file.Path to open its private local file, file.Kind to distinguish Video from Timestamp, and file.SeqID/file.Sensor to identify it. Return a MATLAB value. The example counts decoded frames and computes mean brightness without loading the whole video, or reads timestamp statistics. Each result is saved as a MAT file containing result and source metadata before deleting the downloaded input. It does not require simultaneous access to video and timestamp files; analyses needing paired or synchronized sensors should instead process complete sequences with the regular downloader.
+
+Processing uses a dedicated unique scratch folder under workFolder/scratch, never deletes files from an existing dataset, and stops on the first download, processing, save or cleanup failure. Failed raw or partial files are retained for inspection. A subsequent call skips results already saved and uses new scratch storage. Old failed scratch folders are not automatically reused or deleted. Use a new workFolder when changing the processor or its parameters; existing results are identified by source file, not algorithm version. Run only one processing instance per workFolder. The processing report is saved as process_all.csv when the invocation returns; per-file MAT results survive interruptions. Processing has a one-file working set (HTTP resume staging and results may need additional space). It checks known published sizes but does not establish publisher-authenticated integrity. The optional full-dataset operations must be explicitly confirmed; use IDs/Sensors for bounded tests.
+
 ## API
 
 | Method/property | Purpose |
