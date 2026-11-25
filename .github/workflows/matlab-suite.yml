@@ -1,0 +1,55 @@
+name: MATLAB Suite CI (R2026b)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: matlab-suite-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  matlab-tests:
+    name: Offline MATLAB tests / Windows / R2026b
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out HODOR
+        uses: actions/checkout@v4
+
+      - name: Set up MATLAB R2026b
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          release: R2026b
+
+      # Offline tests: synthetic metadata, tiny video fixtures, no PANGAEA download.
+      # Use the official MATLAB action so public-repository CI licensing is handled.
+      - name: Run HODOR MATLAB unit tests
+        uses: matlab-actions/run-tests@v3
+        with:
+          source-folder: meta/hodor_matlab
+          select-by-folder: meta/hodor_matlab/tests
+          output-detail: verbose
+          test-results-junit: test-results/matlab-suite.xml
+          code-coverage-cobertura: code-coverage/cobertura.xml
+          code-coverage-metrics: statement
+
+      - name: Upload test and coverage results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hodor-matlab-r2026b-results
+          path: |
+            test-results/
+            code-coverage/
+          if-no-files-found: warn
+          retention-days: 14

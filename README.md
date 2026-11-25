@@ -133,6 +133,17 @@ hodor.download_sequence(42)
 
 ### 🧠 MATLAB
 
+The native [**HODOR MATLAB Suite**](meta/hodor_matlab/README.md) provides metadata filtering, resumable camera/sonar downloads, and three levels of integrity validation (quick, standard, deep), without a Python dependency. It is designed to work with the existing HODOR sequence paths.
+
+```matlab
+addpath('meta/hodor_matlab')
+ds = hodor.HODORDataset('D:/HODOR');
+ds.downloadSequence(42);
+report = ds.validateSequence(42, 'Level','standard');
+```
+
+Additional MATLAB scripts (legacy utilities):
+
 * visualizeSequence.m: Display all sensor data at the same time (see example-gif above)
 
 * analyzeCompleteSet: Runs through all dataset video files and performs statistical measurements
