@@ -118,6 +118,16 @@ r = ds.downloadVideo(1464,'RetryDelay',5,'SubRetries',10,'Retries',3);
 % Retries=0 or SubRetries=0: only the initial visit (no retry sweeps).
 ```
 
+### Command-window progress
+
+HODOR includes a pinned copy of [FanCmdWaitbar](https://github.com/TAWilts/FanCMDWaitbar), in the internal package `+hodor/+internal/+vendor`. No additional installation, path configuration, submodule initialization, or runtime download is necessary. The original implementation is unchanged, and its upstream revision and MIT attribution are recorded in the adjacent NOTICE. The progress bar counts successfully downloaded or skipped files, not bytes or retry attempts. Pending and retry status are updated on the same line; exhausted-block warnings are printed separately. ETA is approximate, especially while archive retrieval is pending. Disable rendering for batch logs with `'ShowProgress',false` either in the constructor or in any download method. Warnings and final result tables remain available when rendering is disabled. If rendering fails, downloading continues.
+
+```matlab
+ds = hodor.HODORDataset("D:\HODOR",'ShowProgress',true);
+r = ds.downloadSequence(1464);
+r = ds.downloadVideo(1788,'ShowProgress',false);
+```
+
 Use a longer delay if the server remains unavailable; the defaults are not evidence of PANGAEA's actual archive retrieval duration. No background job is created. MATLAB's native `VideoReader` decoder determines which MP4 formats can be checked on each platform.
 
 ## Running tests

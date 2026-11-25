@@ -8,6 +8,7 @@ classdef HODORDataset < handle
         Retries (1,1) double
         SubRetries (1,1) double
         RetryDelay (1,1) double
+        ShowProgress (1,1) logical
         AllowNetwork (1,1) logical
     end
     properties (Dependent)
@@ -34,6 +35,7 @@ classdef HODORDataset < handle
                 opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = 5
                 opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = 10
                 opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = 1
+                opts.ShowProgress (1,1) logical = true
                 opts.AllowNetwork (1,1) logical = true
             end
             obj.DatasetFolder = folder;
@@ -41,6 +43,7 @@ classdef HODORDataset < handle
             obj.Retries = opts.Retries;
             obj.SubRetries = opts.SubRetries;
             obj.RetryDelay = opts.RetryDelay;
+            obj.ShowProgress = opts.ShowProgress;
             obj.AllowNetwork = opts.AllowNetwork;
             if ~isfolder(folder), mkdir(folder); end
             if ~isfolder(fullfile(folder,'meta')), mkdir(fullfile(folder,'meta')); end
@@ -139,8 +142,9 @@ classdef HODORDataset < handle
                 opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
                 opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
                 opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
+                opts.ShowProgress (1,1) logical = obj.ShowProgress
             end
-            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
+            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries,opts.ShowProgress);
         end
 
         function result = downloadVideo(obj,ids,opts)
@@ -153,8 +157,9 @@ classdef HODORDataset < handle
                 opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
                 opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
                 opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
+                opts.ShowProgress (1,1) logical = obj.ShowProgress
             end
-            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
+            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries,opts.ShowProgress);
         end
 
         function result = downloadSonar(obj,ids,opts)
@@ -167,8 +172,9 @@ classdef HODORDataset < handle
                 opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
                 opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
                 opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
+                opts.ShowProgress (1,1) logical = obj.ShowProgress
             end
-            result = obj.download(ids,"sonar",opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
+            result = obj.download(ids,"sonar",opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries,opts.ShowProgress);
         end
 
         function report = recordChecksums(obj,ids,opts)
@@ -356,10 +362,6 @@ classdef HODORDataset < handle
         end
 
         function [status,message,code,delay] = attemptDownload(obj,files,k,first,force)
-            if first
-                fprintf('[%d/%d] Sequence %04d %s %s\n',k,height(files), ...
-                    files.SeqID(k),files.Sensor(k),files.Kind(k));
-            end
             % One transfer attempt per queue visit; no per-file retry output.
             % Forced downloads discard an old partial only on their first visit.
             [status,message,code,delay] = hodor.internal.downloadFile( ...
@@ -367,7 +369,7 @@ classdef HODORDataset < handle
                 'Timeout',obj.Timeout,'Retries',0,'Force',force,'ResetPartial',first);
         end
 
-        function result = download(obj,ids,sensors,force,validate,retryDelay,recordSHA256,retries,subRetries)
+        function result = download(obj,ids,sensors,force,validate,retryDelay,recordSHA256,retries,subRetries,showProgress)
             if ~obj.AllowNetwork, error('hodor:Offline','Downloads require network access.'); end
             ids = obj.normalizeIDs(ids);
             sensors = obj.normalizeSensors(sensors);
@@ -375,7 +377,8 @@ classdef HODORDataset < handle
             n = height(files);
             [status,message,attempts] = hodor.internal.downloadQueue(n, ...
                 @(k,first) obj.attemptDownload(files,k,first,force), ...
-                'Retries',retries,'SubRetries',subRetries,'RetryDelay',retryDelay);
+                'Retries',retries,'SubRetries',subRetries,'RetryDelay',retryDelay, ...
+                'ShowProgress',showProgress,'Labels',files.RelativePath);
             result = files;
             result.Status = status;
             result.Message = message;
