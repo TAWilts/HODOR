@@ -6,6 +6,8 @@ classdef HODORDataset < handle
         DatasetFolder (1,1) string
         Timeout (1,1) double
         Retries (1,1) double
+        SubRetries (1,1) double
+        RetryDelay (1,1) double
         AllowNetwork (1,1) logical
     end
     properties (Dependent)
@@ -29,12 +31,16 @@ classdef HODORDataset < handle
             arguments
                 folder (1,1) string
                 opts.Timeout (1,1) double {mustBePositive} = 180
-                opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger} = 4
+                opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = 5
+                opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = 10
+                opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = 1
                 opts.AllowNetwork (1,1) logical = true
             end
             obj.DatasetFolder = folder;
             obj.Timeout = opts.Timeout;
             obj.Retries = opts.Retries;
+            obj.SubRetries = opts.SubRetries;
+            obj.RetryDelay = opts.RetryDelay;
             obj.AllowNetwork = opts.AllowNetwork;
             if ~isfolder(folder), mkdir(folder); end
             if ~isfolder(fullfile(folder,'meta')), mkdir(fullfile(folder,'meta')); end
@@ -130,9 +136,11 @@ classdef HODORDataset < handle
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
                 opts.RecordSHA256 (1,1) logical = false
-                opts.RetryDelay (1,1) double {mustBeNonnegative} = 5
+                opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
+                opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
+                opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
             end
-            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256);
+            result = obj.download(ids,opts.Sensors,opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
         end
 
         function result = downloadVideo(obj,ids,opts)
@@ -142,8 +150,11 @@ classdef HODORDataset < handle
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
                 opts.RecordSHA256 (1,1) logical = false
+                opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
+                opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
+                opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
             end
-            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,5,opts.RecordSHA256);
+            result = obj.download(ids,["cam1","cam2"],opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
         end
 
         function result = downloadSonar(obj,ids,opts)
@@ -153,8 +164,11 @@ classdef HODORDataset < handle
                 opts.Force (1,1) logical = false
                 opts.Validate (1,1) logical = true
                 opts.RecordSHA256 (1,1) logical = false
+                opts.RetryDelay (1,1) double {mustBeNonnegative,mustBeFinite} = obj.RetryDelay
+                opts.Retries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.Retries
+                opts.SubRetries (1,1) double {mustBeNonnegative,mustBeInteger,mustBeFinite} = obj.SubRetries
             end
-            result = obj.download(ids,"sonar",opts.Force,opts.Validate,5,opts.RecordSHA256);
+            result = obj.download(ids,"sonar",opts.Force,opts.Validate,opts.RetryDelay,opts.RecordSHA256,opts.Retries,opts.SubRetries);
         end
 
         function report = recordChecksums(obj,ids,opts)
@@ -341,27 +355,31 @@ classdef HODORDataset < handle
             end
         end
 
-        function result = download(obj,ids,sensors,force,validate,retryDelay,recordSHA256)
+        function [status,message,code,delay] = attemptDownload(obj,files,k,first,force)
+            if first
+                fprintf('[%d/%d] Sequence %04d %s %s\n',k,height(files), ...
+                    files.SeqID(k),files.Sensor(k),files.Kind(k));
+            end
+            % One transfer attempt per queue visit; no per-file retry output.
+            % Forced downloads discard an old partial only on their first visit.
+            [status,message,code,delay] = hodor.internal.downloadFile( ...
+                files.URL(k),files.Path(k),files.ExpectedBytes(k), ...
+                'Timeout',obj.Timeout,'Retries',0,'Force',force,'ResetPartial',first);
+        end
+
+        function result = download(obj,ids,sensors,force,validate,retryDelay,recordSHA256,retries,subRetries)
             if ~obj.AllowNetwork, error('hodor:Offline','Downloads require network access.'); end
             ids = obj.normalizeIDs(ids);
             sensors = obj.normalizeSensors(sensors);
             files = hodor.internal.fileManifest(obj.DatasetFolder,obj.sequences,ids,sensors,obj.fileSizes());
             n = height(files);
-            status = strings(n,1);
-            message = strings(n,1);
-            for k = 1:n
-                fprintf('[%d/%d] Sequence %04d %s %s\n',k,n,files.SeqID(k),files.Sensor(k),files.Kind(k));
-                [status(k),message(k)] = hodor.internal.downloadFile( ...
-                    files.URL(k),files.Path(k),files.ExpectedBytes(k), ...
-                    'Timeout',obj.Timeout,'Retries',obj.Retries, ...
-                    'RetryDelay',retryDelay,'Force',force);
-                if status(k)=="FAILED"
-                    warning('hodor:DownloadFailed','%s: %s',files.Path(k),message(k));
-                end
-            end
+            [status,message,attempts] = hodor.internal.downloadQueue(n, ...
+                @(k,first) obj.attemptDownload(files,k,first,force), ...
+                'Retries',retries,'SubRetries',subRetries,'RetryDelay',retryDelay);
             result = files;
             result.Status = status;
             result.Message = message;
+            result.Attempts = attempts;
             result.TimeUTC = repmat(string(datetime('now','TimeZone','UTC')),n,1);
             allResults = result;
             reportFolder = fullfile(obj.DatasetFolder,'reports');
@@ -370,6 +388,9 @@ classdef HODORDataset < handle
             if isfile(filename)
                 try
                     previous = readtable(filename,'TextType','string');
+                    if ~ismember('Attempts',previous.Properties.VariableNames)
+                        previous.Attempts = NaN(height(previous),1); % Legacy manifest.
+                    end
                     previous = previous(:,result.Properties.VariableNames);
                     previous.TimeUTC = string(previous.TimeUTC);
                     previous(ismember(previous.Path,result.Path),:) = [];

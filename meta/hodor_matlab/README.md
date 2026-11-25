@@ -108,7 +108,17 @@ Downloads use temporary `.part` files, retry network errors and PANGAEA tape-ret
 
 Resumed responses are staged separately and their `Content-Range` is checked before appending; temporary server errors preserve the existing partial file. Staging needs additional disk space for the resumed response. HTTP `Content-Length`, when supplied, is also checked before promotion, even when the published size is unavailable. Transport completeness alone does not establish dataset integrity.
 
-PANGAEA may need time to restore files from tape; failed files remain visible in the result table and may be retried by calling the method again. No background job is created. MATLAB's native `VideoReader` decoder determines which MP4 formats can be checked on each platform.
+PANGAEA may need time to restore files from tape. The batch downloader first visits all requested files once, then revisits only transient failures in serial retry sweeps (no Parallel Computing Toolbox). The default `RetryDelay=1` second is the minimum pause between sweeps, `SubRetries=10` sweeps per block, and `Retries=5` blocks maximum. This means at most **51 file attempts** (one initial visit + 50 retries). There is no output for individual retries; one aggregate warning is emitted after each block that still has pending files, and permanent failures are summarized separately. HTTP 429, 503 and other transient failures are eligible; permanent client errors such as 401, 403 and 404 are not. A valid server `Retry-After` header on HTTP 202/429/503 can extend the entire sweep's wait. Request durations are additional; this is an attempt budget, not a hard wall-clock limit. Completed/skipped files are never revisited, and forced downloads reset a previous partial only on the first attempt. Failed files remain visible in the result table and may be retried by calling the method again; the `Attempts` column counts queue visits (including an initial local skip).
+
+```matlab
+ds = hodor.HODORDataset("D:\HODOR",'RetryDelay',1,'SubRetries',10,'Retries',5);
+r = ds.downloadSequence([1464 1788]);
+% Override the defaults for any of the three download methods:
+r = ds.downloadVideo(1464,'RetryDelay',5,'SubRetries',10,'Retries',3);
+% Retries=0 or SubRetries=0: only the initial visit (no retry sweeps).
+```
+
+Use a longer delay if the server remains unavailable; the defaults are not evidence of PANGAEA's actual archive retrieval duration. No background job is created. MATLAB's native `VideoReader` decoder determines which MP4 formats can be checked on each platform.
 
 ## Running tests
 
