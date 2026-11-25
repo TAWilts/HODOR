@@ -145,71 +145,7 @@ if ~isscalar(field), return; end
 try
     value = strtrim(string(field.Value));
     if ~isscalar(value) || ismissing(value), return; end
-    if ~isempty(regexp(char(value),'^[0-9]+
-% MATLAB may warn, rather than throw, when a response body ends early.
-field = response.getFields('Content-Length');
-if isempty(field), return; end
-if ~isscalar(field)
-    error('hodor:InvalidResponse','Ambiguous HTTP Content-Length.');
-end
-declaredBytes = str2double(string(field.Value));
-if ~isfinite(declaredBytes) || declaredBytes<0 || declaredBytes~=floor(declaredBytes)
-    error('hodor:InvalidResponse','Invalid HTTP Content-Length.');
-end
-if receivedBytes~=declaredBytes
-    error('hodor:IncompleteDownload', ...
-        'Incomplete HTTP response: %d / %.0f Content-Length bytes.',receivedBytes,declaredBytes);
-end
-end
-
-function total = checkRange(response,offset,receivedBytes,expectedBytes)
-% Check the complete range before its separately staged bytes are appended.
-field = response.getFields('Content-Range');
-parts = {};
-if isscalar(field)
-    parts = regexpi(char(strtrim(string(field.Value))), ...
-        '^bytes (\d+)-(\d+)/(\d+)$','tokens','once');
-end
-if isempty(parts)
-    error('hodor:InvalidRange','Missing or invalid HTTP Content-Range.');
-end
-values = str2double(parts);
-first = values(1);
-last = values(2);
-total = values(3);
-if any(~isfinite(values)) || first~=offset || last<first || ...
-        last>=total || receivedBytes~=last-first+1 || ...
-        isfinite(expectedBytes) && total~=expectedBytes
-    error('hodor:InvalidRange','HTTP Content-Range does not match requested offset, length or total.');
-end
-end
-
-function appendResponse(source,destination)
-input = fopen(source,'rb');
-if input<0, error('hodor:FileAccess','Cannot read %s',source); end
-inputCleanup = onCleanup(@()fclose(input));
-output = fopen(destination,'ab');
-if output<0, error('hodor:FileAccess','Cannot append to %s',destination); end
-outputCleanup = onCleanup(@()fclose(output));
-sourceInfo = dir(source);
-remaining = sourceInfo.bytes;
-while remaining>0
-    requested = min(1024*1024,remaining);
-    bytes = fread(input,requested,'*uint8');
-    if numel(bytes)~=requested
-        error('hodor:FileAccess','Unable to read the full staged HTTP response.');
-    end
-    if fwrite(output,bytes,'uint8')~=numel(bytes)
-        error('hodor:FileAccess','Unable to append the full HTTP response.');
-    end
-    remaining = remaining-numel(bytes);
-end
-end
-
-function removeResponse(filename)
-if isfile(filename), delete(filename); end
-end
-,'once'))
+    if ~isempty(regexp(char(value),'^[0-9]+$','once'))
         d = str2double(value);
     else
         date = datetime(value,'InputFormat',"eee, dd MMM yyyy HH:mm:ss 'GMT'", ...
